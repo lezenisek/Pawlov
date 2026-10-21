@@ -121,6 +121,22 @@ Tricks_button = ctk.CTkButton(
     font=ctk.CTkFont(size=20),
 
 )
+
+Tierauswahl_button = ctk.CTkButton(
+    menu_frame,
+    text="Tierauswahl",
+    width=200,
+    height=50,
+    corner_radius=10,
+
+    fg_color=MENU_COLOR,
+    hover_color="#37513F",
+    text_color=TEXT_COLOR,
+
+    font=ctk.CTkFont(size=20),
+
+)   
+
 Training_button = ctk.CTkButton(
     menu_frame,
     text="Training",
@@ -165,6 +181,7 @@ Einstellungen_button = ctk.CTkButton(
 )
 #Buttons anzeigen:
 Tricks_button.pack(pady=(100, 10))  
+Tierauswahl_button.pack(pady=10)
 Training_button.pack(pady=10)
 Statistik_button.pack(pady=10)
 Einstellungen_button.pack(pady=10)
@@ -225,11 +242,11 @@ button_frame.pack(expand=True)
 
 buttons = []
 
-for i in range(1, 5):
+for i in range(1, 3):
 
     button = ctk.CTkButton(
         button_frame,
-        text=str(i),
+        
 
         width=180,
         height=130,
@@ -254,7 +271,9 @@ for i in range(1, 5):
 
     buttons.append(button)
 
-
+#------------------- Text auf Buttons setzen --------------------#
+buttons[0].configure(text="Katze", image=cat.png)
+buttons[1].configure(text="Kaninchen" )
 # --------------------------------------------------
 # 2 x 2 ANORDNUNG
 # --------------------------------------------------
@@ -262,8 +281,6 @@ for i in range(1, 5):
 buttons[0].grid(row=0, column=0, padx=20, pady=20)
 buttons[1].grid(row=0, column=1, padx=20, pady=20)
 
-buttons[2].grid(row=1, column=0, padx=20, pady=20)
-buttons[3].grid(row=1, column=1, padx=20, pady=20)
 
 
 # --------------------------------------------------
