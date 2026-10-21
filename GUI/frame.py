@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from PIL import Image, ImageTk
+from MeineTiere import MeineTierePage
+from colors import *
 
 # --------------------------------------------------
 # GRUNDEINSTELLUNGEN
@@ -7,15 +10,18 @@ import customtkinter as ctk
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-# Farben
 
-BACKGROUND_COLOR = "#B9CFBA"
-MENU_COLOR = "#546B53"
-BUTTON_COLOR = "#546B53"
-BUTTON_HOVER_COLOR = "#37513F"
-BUTTON_ACTIVE_COLOR = "#37513F"
-TEXT_COLOR = "#27201C"
 
+# Bilder
+# cat_image = ctk.CTkImage(
+#     light_image=Image.open("GUI/images/cat.png"),
+#     size=(80, 80)
+# )
+
+# bunny_image = ctk.CTkImage(
+#     light_image=Image.open("GUI/images/bunny.png"),
+#     size=(80, 80)
+# )
 
 # --------------------------------------------------
 # HAUPTFENSTER
@@ -23,11 +29,47 @@ TEXT_COLOR = "#27201C"
 
 app = ctk.CTk()
 
-app.title("PAWLOV: Tierisch gut trainieren")
 app.geometry("900x600")
 app.minsize(700, 500)
-
 app.configure(fg_color=BACKGROUND_COLOR)
+
+
+# Homepage als eigener Frame
+home_page = ctk.CTkFrame(
+    app,
+    fg_color=BACKGROUND_COLOR,
+    corner_radius=0
+)
+
+home_page.place(
+    x=0,
+    y=0,
+    relwidth=1,
+    relheight=1
+)
+
+
+# Meine Tiere Seite
+meine_tiere_page = MeineTierePage(app)
+
+
+# Titel /Text
+title = ctk.CTkLabel(
+    home_page,
+    text="PAWLOV",
+    font=ctk.CTkFont(size=42, weight="bold"),
+    text_color=TEXT_COLOR
+)
+
+subtitle = ctk.CTkLabel(
+    home_page,
+    text="tierisch gut trainieren",
+    font=ctk.CTkFont(size=18),
+    text_color="#AEBBAF"
+)
+
+title.pack(pady=(60, 10))
+subtitle.pack(pady=(0, 50))
 
 #---------------Menü Code ----------------------#
 MENU_WIDTH = 250
@@ -78,13 +120,45 @@ def animate_menu(start, target):
     else:
         new_x = max(start - step, target)
 
-    menu_frame.place(x=new_x, y=0)
+    menu_frame.place(
+        x=new_x,
+        y=0,
+        relheight=1
+    )
 
     if new_x != target:
         app.after(
             10,
             lambda: animate_menu(new_x, target)
         )
+
+
+def neues_tier_oeffnen():
+    seite_anzeigen(meine_tiere_page)
+    meine_tiere_page.formular_anzeigen()
+
+
+def seite_anzeigen(seite):
+    # alle Seiten verstecken
+    home_page.place_forget()
+    meine_tiere_page.place_forget()
+    # training_page.place_forget()
+    # statistik_page.place_forget()
+
+    # gewünschte Seite anzeigen
+    seite.place(
+        x=0,
+        y=0,
+        relwidth=1,
+        relheight=1
+    )
+
+    seite.lift()
+
+    # Menü und Menübutton müssen über den Seiten bleiben
+    menu_frame.lift()
+    menu_button.lift()
+
 
 #---------------------Menü Button --------------------#
 menu_button = ctk.CTkButton(
@@ -107,6 +181,40 @@ menu_button.place(x=20, y=20)
 
 #---------------------Menü Inhalt --------------------#
 #Menü buttons: Tricks, Training, Statistik, Einstellungen:
+MeineTiere_button = ctk.CTkButton(
+    menu_frame,
+    text="Meine Tiere",
+    width=200,
+    height=50,
+    corner_radius=10,
+
+    fg_color=MENU_COLOR,
+    hover_color="#37513F",
+    text_color=TEXT_COLOR,
+
+    font=ctk.CTkFont(size=20),
+
+    command=lambda: seite_anzeigen(meine_tiere_page)
+
+)
+
+Home_button = ctk.CTkButton(
+    menu_frame,
+    text="Home",
+    width=200,
+    height=50,
+    corner_radius=10,
+
+    fg_color=MENU_COLOR,
+    hover_color="#37513F",
+    text_color=TEXT_COLOR,
+
+    font=ctk.CTkFont(size=20),
+
+    command=lambda: seite_anzeigen(home_page)
+
+)
+
 Tricks_button = ctk.CTkButton(
     menu_frame,
     text="Tricks",
@@ -135,7 +243,7 @@ Tierauswahl_button = ctk.CTkButton(
 
     font=ctk.CTkFont(size=20),
 
-)   
+)
 
 Training_button = ctk.CTkButton(
     menu_frame,
@@ -151,6 +259,7 @@ Training_button = ctk.CTkButton(
     font=ctk.CTkFont(size=20),
 
 )
+
 Statistik_button = ctk.CTkButton(
     menu_frame,
     text="Statistik",
@@ -165,6 +274,7 @@ Statistik_button = ctk.CTkButton(
     font=ctk.CTkFont(size=20),
 
 )
+
 Einstellungen_button = ctk.CTkButton(
     menu_frame,
     text="Einstellungen",
@@ -179,8 +289,22 @@ Einstellungen_button = ctk.CTkButton(
     font=ctk.CTkFont(size=20),
 
 )
+
+
+animal_label = ctk.CTkLabel(
+    home_page,
+    text="Mit wem möchtest du heute trainieren?",
+    font=ctk.CTkFont(size=22, weight="bold"),
+    text_color=TEXT_COLOR
+)
+
+#label über Buttons
+animal_label.pack(pady=(20, 10))
+
 #Buttons anzeigen:
-Tricks_button.pack(pady=(100, 10))  
+Home_button.pack(pady=(100, 10))
+MeineTiere_button.pack(pady=10)
+Tricks_button.pack(pady=10)
 Tierauswahl_button.pack(pady=10)
 Training_button.pack(pady=10)
 Statistik_button.pack(pady=10)
@@ -207,29 +331,11 @@ def select_button(button):
 
 
 # --------------------------------------------------
-# ÜBERSCHRIFT
-# --------------------------------------------------
-
-title = ctk.CTkLabel(
-    app,
-    text="PAWLOV",
-    font=ctk.CTkFont(
-        family="Arial",
-        size=48,
-        weight="bold"
-    ),
-    text_color=TEXT_COLOR
-)
-
-title.pack(pady=(60, 50))
-
-
-# --------------------------------------------------
 # BUTTON-BEREICH
 # --------------------------------------------------
 
 button_frame = ctk.CTkFrame(
-    app,
+    home_page,
     fg_color="transparent"
 )
 
@@ -246,7 +352,6 @@ for i in range(1, 3):
 
     button = ctk.CTkButton(
         button_frame,
-        
 
         width=180,
         height=130,
@@ -259,7 +364,7 @@ for i in range(1, 3):
         text_color=TEXT_COLOR,
 
         font=ctk.CTkFont(
-            size=36,
+            size=24,
             weight="bold"
         )
     )
@@ -272,15 +377,14 @@ for i in range(1, 3):
     buttons.append(button)
 
 #------------------- Text auf Buttons setzen --------------------#
-buttons[0].configure(text="Katze", image=cat.png)
-buttons[1].configure(text="Kaninchen" )
-# --------------------------------------------------
-# 2 x 2 ANORDNUNG
-# --------------------------------------------------
+buttons[0].configure(text="Neues Tier anlegen", image=None, text_color=TEXT_COLOR, command=neues_tier_oeffnen)
+# #buttons[1].configure (text="Tier auswählen", image=None, text_color=TEXT_COLOR)
+# # --------------------------------------------------
+# # 2 x 2 ANORDNUNG
+# # --------------------------------------------------
 
 buttons[0].grid(row=0, column=0, padx=20, pady=20)
-buttons[1].grid(row=0, column=1, padx=20, pady=20)
-
+#buttons[1].grid(row=0, column=1, padx=20, pady=20)
 
 
 # --------------------------------------------------
