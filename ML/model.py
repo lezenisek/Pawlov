@@ -1,0 +1,1 @@
+# CNN Model, was die Daten verarbeitet

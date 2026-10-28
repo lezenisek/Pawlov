@@ -1,0 +1,1 @@
+# Ausgabe vorhersagen anhand der Trainingsdaten 
