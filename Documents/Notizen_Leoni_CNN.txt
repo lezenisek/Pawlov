@@ -1,0 +1,4 @@
+Notizen CNN 
+
+- erstmal 3 Faltungen, damit wir ein tradeoff von Komplexität und rechenaufwand haben 
+- Modell inklusive Erklärungen durch Codekommentare in model.py 
