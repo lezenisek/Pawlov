@@ -1,0 +1,1 @@
+Hier bitte in den Ordner ALLE Katzenbilder von Katzen, die SITZ machen. 
