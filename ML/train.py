@@ -39,7 +39,7 @@ validation_dataset = datasets.ImageFolder(
 
 #------------------- DATALOADER -------------------
 
-train_loader = DataLoader(
+train_loader = DataLoader( # Daten in batches aufteilen und zufällig mischen 
     train_dataset,
     batch_size=BATCH_SIZE,
     shuffle=True
@@ -48,7 +48,7 @@ train_loader = DataLoader(
 validation_loader = DataLoader(
     validation_dataset,
     batch_size=BATCH_SIZE,
-    shuffle=False
+    shuffle=False # kein shuffle notwendig, da wir nur überprüfen statt lernen 
 )
 
 
@@ -59,20 +59,18 @@ model = PawlovCNN()
 
 #------------------- FEHLERFUNKTION -------------------
 
-criterion = nn.CrossEntropyLoss()
+criterion = nn.CrossEntropyLoss() # Loss Funktion auswählen 
 
 
 #------------------- OPTIMIZER -------------------
 
-optimizer = optim.Adam(
-    model.parameters(),
+optimizer = optim.Adam( #adam optimizer gewählt 
+    model.parameters(), # alle Parameter des Modells werden optimiert
     lr=LEARNING_RATE
 )
 
 
-# --------------------------------------------------
-# TRAINING
-# --------------------------------------------------
+#-------------------- TRAINING -------------------
 
 for epoch in range(EPOCHS):
 
@@ -100,16 +98,13 @@ for epoch in range(EPOCHS):
         training_loss += loss.item()
 
 
-    # --------------------------------------------------
-    # VALIDIERUNG
-    # --------------------------------------------------
-
-    model.eval()
+#------------------- VALIDIERUNG -------------------
+    model.eval() # modellleistung evaluieren, keine gewichte anpassen
 
     correct = 0
     total = 0
 
-    with torch.no_grad():
+    with torch.no_grad(): # keine lernschritte, nur Vorhersagen machen, quasi mini test 
 
         for images, labels in validation_loader:
 
@@ -131,13 +126,10 @@ for epoch in range(EPOCHS):
     )
 
 
-# --------------------------------------------------
-# MODELL SPEICHERN
-# --------------------------------------------------
-
+#------------------- MODELL SPEICHERN -------------------
 torch.save(
     model.state_dict(),
-    "maennchen_model.pth"
+    "kaninchen_maennchen_model.pth"
 )
 
 print("Training abgeschlossen.")
